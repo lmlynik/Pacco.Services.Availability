@@ -4,17 +4,23 @@ using System.Linq;
 using System.Text;
 using Convey;
 using Convey.CQRS.Queries;
+using Convey.Docs.Swagger;
 using Convey.MessageBrokers;
 using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.RabbitMQ;
 using Convey.Persistence.MongoDB;
 using Convey.Persistence.Redis;
 using Convey.WebApi;
+using Convey.WebApi.CQRS;
+using Convey.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Pacco.Services.Availability.Application;
+using Pacco.Services.Availability.Application.Commands;
 using Pacco.Services.Availability.Application.Events;
+using Pacco.Services.Availability.Application.Events.External;
 using Pacco.Services.Availability.Application.Services;
 using Pacco.Services.Availability.Core.Repositories;
 using Pacco.Services.Availability.Infrastructure.Contexts;
@@ -38,6 +44,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
 
             return builder
+                .AddWebApiSwaggerDocs()
                 .AddQueryHandlers()
                 .AddInMemoryQueryDispatcher()
                 .AddErrorHandler<ExceptionToResponseMapper>()
@@ -53,7 +60,11 @@ namespace Pacco.Services.Availability.Infrastructure
         {
             app.UseErrorHandler()
                 .UseConvey()
+                .UseSwaggerDocs()
+                .UsePublicContracts<ContractAttribute>()
                 .UseRabbitMq()
+                .SubscribeCommand<AddResource>()
+                .SubscribeCommand<ReserveResource>()
                 .SubscribeEvent<SignedUp>()
                 .SubscribeEvent<CustomerCreated>();
 
