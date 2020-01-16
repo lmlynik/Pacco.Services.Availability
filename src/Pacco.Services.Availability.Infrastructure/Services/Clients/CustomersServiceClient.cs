@@ -19,6 +19,6 @@ namespace Pacco.Services.Availability.Infrastructure.Services.Clients
         }
 
         public Task<CustomerStateDto> GetStateAsync(Guid customerId)
-            => _client.GetAsync<CustomerStateDto>($"{_url}/customers/{customerId}/state");
+            => _client.GetAsync<CustomerStateDto>($"{_url}/secret/customers/{customerId}/state");
     }
 }
