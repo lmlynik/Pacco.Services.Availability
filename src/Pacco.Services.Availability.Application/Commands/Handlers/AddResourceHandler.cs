@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Convey.CQRS.Commands;
+using Microsoft.Extensions.Logging;
 using Pacco.Services.Availability.Application.Events;
 using Pacco.Services.Availability.Application.Exceptions;
 using Pacco.Services.Availability.Application.Services;

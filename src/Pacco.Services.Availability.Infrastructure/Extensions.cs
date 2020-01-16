@@ -58,6 +58,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
             builder.Services.AddHostedService<MetricsJob>();
+            builder.Services.AddTransient<CustomMetricsMiddleware>();
             
             return builder
                 .AddMessageOutbox(o => o.AddMongo())
@@ -82,6 +83,7 @@ namespace Pacco.Services.Availability.Infrastructure
             app.UseErrorHandler()
                 .UseConvey()
                 .UseMetrics()
+                .UseMiddleware<CustomMetricsMiddleware>()
                 .UseSwaggerDocs()
                 .UsePublicContracts<ContractAttribute>()
                 .UseRabbitMq()
