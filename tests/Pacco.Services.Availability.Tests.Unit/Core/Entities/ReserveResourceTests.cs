@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Linq;
 using Pacco.Services.Availability.Core.Entities;
 using Pacco.Services.Availability.Core.Events;
