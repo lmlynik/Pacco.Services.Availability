@@ -29,7 +29,7 @@ namespace Pacco.Services.Availability.Tests.EndToEnd.Http
             var response = await act(resourceId);
             
             response.ShouldNotBeNull();
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         }
         
         [Fact]

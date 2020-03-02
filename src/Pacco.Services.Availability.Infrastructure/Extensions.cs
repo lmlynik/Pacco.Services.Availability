@@ -24,6 +24,7 @@ using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Convey.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -64,7 +65,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient<CustomMetricsMiddleware>();
             
             return builder
-                .AddMessageOutbox(o => o.AddMongo())
+                //.AddMessageOutbox(o => o.AddMongo())
                 .AddWebApiSwaggerDocs()
                 .AddQueryHandlers()
                 .AddInMemoryQueryDispatcher()
