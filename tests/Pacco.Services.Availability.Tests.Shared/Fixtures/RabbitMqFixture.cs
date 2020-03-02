@@ -53,7 +53,7 @@ namespace Pacco.Services.Availability.Tests.Shared.Fixtures
             _channel.BasicPublish(exchange, routingKey, properties, body);
             return Task.CompletedTask;
         }
-        
+
         public TaskCompletionSource<TEntity> SubscribeAndGet<TMessage, TEntity>(string exchange,
             Func<Guid, TaskCompletionSource<TEntity>, Task> onMessageReceived, Guid id)
         {
