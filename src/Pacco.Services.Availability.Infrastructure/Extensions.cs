@@ -65,7 +65,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient<CustomMetricsMiddleware>();
             
             return builder
-                //.AddMessageOutbox(o => o.AddMongo())
+                .AddMessageOutbox(o => o.AddMongo())
                 .AddWebApiSwaggerDocs()
                 .AddQueryHandlers()
                 .AddInMemoryQueryDispatcher()
