@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Convey;
-using Convey.Configurations.Vault;
 using Convey.Logging;
+using Convey.Secrets.Vault;
 using Convey.Types;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
