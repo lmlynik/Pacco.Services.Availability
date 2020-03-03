@@ -22,6 +22,7 @@ using Convey.Tracing.Jaeger;
 using Convey.Tracing.Jaeger.RabbitMQ;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
+using Convey.WebApi.Security;
 using Convey.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -81,6 +82,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddJaegerDecorators()
                 .AddHandlersLogging()
                 .AddMetrics()
+                .AddCertificateAuthentication()
                 .AddMongoRepository<ResourceDocument, Guid>("resources");
         }
 
@@ -91,6 +93,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .UseJaeger()
                 .UseMetrics()
                 .UseMiddleware<CustomMetricsMiddleware>()
+                .UseCertificateAuthentication()
                 .UseSwaggerDocs()
                 .UsePublicContracts<ContractAttribute>()
                 .UseRabbitMq()
