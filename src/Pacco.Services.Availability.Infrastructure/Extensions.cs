@@ -15,6 +15,7 @@ using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.Outbox.Mongo;
 using Convey.MessageBrokers.RabbitMQ;
+using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
 using Convey.Persistence.Redis;
 using Convey.WebApi;
@@ -63,6 +64,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddInMemoryQueryDispatcher()
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
+                .AddMetrics()
                 .AddMongo()
                 .AddHttpClient()
                 .AddConsul()
@@ -81,6 +83,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .UseCertificateAuthentication()
                 .UseSwaggerDocs()
                 .UsePublicContracts<ContractAttribute>()
+                .UseMetrics()
                 .UseRabbitMq()
                 .SubscribeCommand<AddResource>()
                 .SubscribeCommand<ReserveResource>()
