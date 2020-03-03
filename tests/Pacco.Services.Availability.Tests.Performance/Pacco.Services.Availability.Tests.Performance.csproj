@@ -15,4 +15,9 @@
     <PackageReference Include="coverlet.collector" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Pacco.Services.Availability.Api\Pacco.Services.Availability.Api.csproj" />
+    <ProjectReference Include="..\..\src\Pacco.Services.Availability.Application\Pacco.Services.Availability.Application.csproj" />
+  </ItemGroup>
+
 </Project>
