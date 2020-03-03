@@ -15,23 +15,18 @@ using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.Outbox.Mongo;
 using Convey.MessageBrokers.RabbitMQ;
-using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
 using Convey.Persistence.Redis;
-using Convey.Tracing.Jaeger;
-using Convey.Tracing.Jaeger.RabbitMQ;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Convey.WebApi.Security;
 using Convey.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Pacco.Services.Availability.Application;
 using Pacco.Services.Availability.Application.Commands;
-using Pacco.Services.Availability.Application.Events;
 using Pacco.Services.Availability.Application.Events.External;
 using Pacco.Services.Availability.Application.Services;
 using Pacco.Services.Availability.Application.Services.Clients;
@@ -39,9 +34,7 @@ using Pacco.Services.Availability.Core.Repositories;
 using Pacco.Services.Availability.Infrastructure.Contexts;
 using Pacco.Services.Availability.Infrastructure.Decorators;
 using Pacco.Services.Availability.Infrastructure.Exceptions;
-using Pacco.Services.Availability.Infrastructure.Jaeger;
 using Pacco.Services.Availability.Infrastructure.Logging;
-using Pacco.Services.Availability.Infrastructure.Metrics;
 using Pacco.Services.Availability.Infrastructure.Mongo.Documents;
 using Pacco.Services.Availability.Infrastructure.Mongo.Repositories;
 using Pacco.Services.Availability.Infrastructure.Services;
@@ -62,8 +55,6 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
-            builder.Services.AddHostedService<MetricsJob>();
-            builder.Services.AddTransient<CustomMetricsMiddleware>();
             
             return builder
                 .AddMessageOutbox(o => o.AddMongo())
@@ -77,11 +68,8 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddConsul()
                 .AddFabio()
                 .AddRedis()
-                .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
-                .AddJaeger()
-                .AddJaegerDecorators()
+                .AddRabbitMq()
                 .AddHandlersLogging()
-                .AddMetrics()
                 .AddCertificateAuthentication()
                 .AddMongoRepository<ResourceDocument, Guid>("resources");
         }
@@ -90,9 +78,6 @@ namespace Pacco.Services.Availability.Infrastructure
         {
             app.UseErrorHandler()
                 .UseConvey()
-                .UseJaeger()
-                .UseMetrics()
-                .UseMiddleware<CustomMetricsMiddleware>()
                 .UseCertificateAuthentication()
                 .UseSwaggerDocs()
                 .UsePublicContracts<ContractAttribute>()

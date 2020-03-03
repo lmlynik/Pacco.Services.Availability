@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Convey.HTTP;
 using Convey.Secrets.Vault;
