@@ -36,6 +36,7 @@ using Pacco.Services.Availability.Infrastructure.Contexts;
 using Pacco.Services.Availability.Infrastructure.Decorators;
 using Pacco.Services.Availability.Infrastructure.Exceptions;
 using Pacco.Services.Availability.Infrastructure.Logging;
+using Pacco.Services.Availability.Infrastructure.Metrics;
 using Pacco.Services.Availability.Infrastructure.Mongo.Documents;
 using Pacco.Services.Availability.Infrastructure.Mongo.Repositories;
 using Pacco.Services.Availability.Infrastructure.Services;
@@ -56,6 +57,7 @@ namespace Pacco.Services.Availability.Infrastructure
             builder.Services.AddTransient(ctx => ctx.GetRequiredService<IAppContextFactory>().Create());
             builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
             builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
+            builder.Services.AddHostedService<MetricsJob>();
             
             return builder
                 .AddMessageOutbox(o => o.AddMongo())
