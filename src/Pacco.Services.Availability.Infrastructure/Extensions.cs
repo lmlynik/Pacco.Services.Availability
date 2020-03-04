@@ -18,6 +18,8 @@ using Convey.MessageBrokers.RabbitMQ;
 using Convey.Metrics.AppMetrics;
 using Convey.Persistence.MongoDB;
 using Convey.Persistence.Redis;
+using Convey.Tracing.Jaeger;
+using Convey.Tracing.Jaeger.RabbitMQ;
 using Convey.WebApi;
 using Convey.WebApi.CQRS;
 using Convey.WebApi.Security;
@@ -68,12 +70,13 @@ namespace Pacco.Services.Availability.Infrastructure
                 .AddErrorHandler<ExceptionToResponseMapper>()
                 .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
                 .AddMetrics()
+                .AddJaeger()
                 .AddMongo()
                 .AddHttpClient()
                 .AddConsul()
                 .AddFabio()
                 .AddRedis()
-                .AddRabbitMq()
+                .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
                 .AddHandlersLogging()
                 .AddCertificateAuthentication()
                 .AddMongoRepository<ResourceDocument, Guid>("resources");
@@ -86,6 +89,7 @@ namespace Pacco.Services.Availability.Infrastructure
                 .UseCertificateAuthentication()
                 .UseSwaggerDocs()
                 .UsePublicContracts<ContractAttribute>()
+                .UseJaeger()
                 .UseMetrics()
                 .UseMiddleware<CustomMetricsMiddleware>()
                 .UseRabbitMq()
