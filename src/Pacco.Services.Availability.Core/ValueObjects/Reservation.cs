@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using Equatable;
 
 namespace Pacco.Services.Availability.Core.ValueObjects
 {
-    public struct Reservation: IEquatable<Reservation>
+    [ImplementsEquatable]
+    [ToString]
+    public class Reservation
     {
+        [Equals]
         public DateTime DateTime { get; }
+        [Equals]
         public int Priority { get; }
 
         public Reservation(DateTime date, int priority)
@@ -13,11 +17,5 @@ namespace Pacco.Services.Availability.Core.ValueObjects
             DateTime = date;
             Priority = priority;
         }
-
-        public override bool Equals(object obj) => obj is Reservation reservation && Equals(reservation);
-
-        public bool Equals([AllowNull] Reservation other) => DateTime == other.DateTime && Priority == other.Priority;
-
-        public override int GetHashCode() => HashCode.Combine(DateTime, Priority);
     }
 }
