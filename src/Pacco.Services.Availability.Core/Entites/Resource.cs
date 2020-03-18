@@ -7,7 +7,7 @@ using Pacco.Services.Availability.Core.ValueObjects;
 
 namespace Pacco.Services.Availability.Core.Entites
 {
-    public class Resource: AggregateRoot
+    public class Resource : AggregateRoot
     {
         private ISet<string> _tags = new HashSet<string>();
 
@@ -37,7 +37,7 @@ namespace Pacco.Services.Availability.Core.Entites
 
         private static void ValidateTags(IEnumerable<string> tags)
         {
-            if(tags is null || !tags.Any())
+            if (tags is null || !tags.Any())
             {
                 throw new MissingResouceTagsException();
             }
@@ -54,6 +54,30 @@ namespace Pacco.Services.Availability.Core.Entites
             resource.AddEvent(new ResourceCreated(resource));
 
             return resource;
+        }
+        public void AddReservation(Reservation reservation)
+        {
+
+            var collidingReservation = Reservations.FirstOrDefault(HasTheSameReservationDate);
+            if (!(collidingReservation is null))
+            {
+                if (collidingReservation.Priority >= reservation.Priority)
+                {
+                    throw new CannotExpropriateReservationException(Id, reservation.DateTime);
+                }
+
+                if (_reservations.Remove(collidingReservation))
+                {
+                    AddEvent(new ReservationCancelled(this, collidingReservation));
+                }
+            }
+
+            if (_reservations.Add(reservation))
+            {
+                AddEvent(new ReservationAdded(this, collidingReservation));
+            }
+
+            bool HasTheSameReservationDate(Reservation r) => r.DateTime.Date == reservation.DateTime.Date;
         }
     }
 }
