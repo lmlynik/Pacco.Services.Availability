@@ -21,13 +21,13 @@ namespace Pacco.Services.Availability.Core.Exceptions
         public override string Code => nameof(InvalidAggregateIdException);
     }
 
-    public class MissingResouceTagsException : DomainException
+    public class MissingResourceTagsException : DomainException
     {
-        public MissingResouceTagsException() : base("Resource tags are missing")
+        public MissingResourceTagsException() : base("Resource tags are missing")
         {
         }
 
-        public override string Code => nameof(MissingResouceTagsException);
+        public override string Code => nameof(MissingResourceTagsException);
     }
 
     public class InvalidResourceTagsException : DomainException

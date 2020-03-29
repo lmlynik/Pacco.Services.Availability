@@ -7,15 +7,17 @@ namespace Pacco.Services.Availability.Core.Exceptions
     [Serializable]
     public class CannotExpropriateReservationException : DomainException
     {
-        private AggregateId id;
+        public AggregateId ResourceId { get; }
         private DateTime dateTime;
 
         public CannotExpropriateReservationException(AggregateId id, DateTime dateTime):base($"Cannot expropriate {id}, at time {dateTime}")
         {
-            this.id = id;
+            this.ResourceId = id;
             this.dateTime = dateTime;
         }
 
         public override string Code => nameof(CannotExpropriateReservationException);
+
+   
     }
 }

@@ -39,7 +39,7 @@ namespace Pacco.Services.Availability.Core.Entites
         {
             if (tags is null || !tags.Any())
             {
-                throw new MissingResouceTagsException();
+                throw new MissingResourceTagsException();
             }
 
             if (tags.Any(string.IsNullOrWhiteSpace))
@@ -59,7 +59,7 @@ namespace Pacco.Services.Availability.Core.Entites
         {
 
             var collidingReservation = Reservations.FirstOrDefault(HasTheSameReservationDate);
-            if (!(collidingReservation is null))
+            if (collidingReservation is { })
             {
                 if (collidingReservation.Priority >= reservation.Priority)
                 {

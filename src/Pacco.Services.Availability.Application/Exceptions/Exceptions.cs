@@ -25,4 +25,16 @@ namespace Pacco.Services.Availability.Application.Exceptions
             this.ResourceId = resourceId;
         }
     }
+
+    public class ResourceNotFoundException : AppException
+    {
+        public Guid ResourceId { get; }
+
+        public ResourceNotFoundException(Guid resourceId) : base($"Resource not found {resourceId}")
+        {
+            this.ResourceId = resourceId;
+        }
+
+        public override string Code => nameof(ResourceNotFoundException);
+    }
 }
